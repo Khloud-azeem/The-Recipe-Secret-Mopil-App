@@ -21,6 +21,7 @@ class _MyAppState extends State<MyApp> {
   Filters _filters = Filters();
 
   List<Meal> _filteredMeals = MealsDetails;
+  List<Meal> _favouriteMeals = [];
 
   void _setFilters(Filters filters) {
     setState(() {
@@ -35,9 +36,29 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void toggleFavourites(String mealId) {
+    final idx = _favouriteMeals.indexWhere((meal) {
+      return meal.id == mealId;
+    });
+    if (idx >= 0) {
+      setState(() {
+        _favouriteMeals
+            .remove(MealsDetails.firstWhere((meal) => meal.id == mealId));
+      });
+    } else {
+      setState(() {
+        _favouriteMeals
+            .add(MealsDetails.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
+
+  bool isFavourite(String mealId) {
+    return _favouriteMeals.any((meal) => meal.id == mealId);
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Recipes Secrets',
       theme: ThemeData(
@@ -59,12 +80,14 @@ class _MyAppState extends State<MyApp> {
       // home: CategoriesScreen(),
       // initialRoute: '/',
       routes: {
-        '/': (context) => TabsScreen(),
+        '/': (context) => TabsScreen(_favouriteMeals),
         CategoryMealsScreen.routeName: (context) =>
             CategoryMealsScreen(_filteredMeals),
-        MealRecipe.routeName: (context) => MealRecipe(),
-        FavouritesScreen.routeName: (context) => FavouritesScreen(),
-        FiltersScreen.routeName: (context) => FiltersScreen(_filters, _setFilters),
+        MealRecipeScreen.routeName: (context) =>
+            MealRecipeScreen(isFavourite, toggleFavourites),
+        // FavouritesScreen.routeName: (context) => FavouritesScreen(),
+        FiltersScreen.routeName: (context) =>
+            FiltersScreen(_filters, _setFilters),
       },
       // onGenerateRoute: (setting) {
       //   return MaterialPageRoute(builder: (context) => CategoryMealsScreen());

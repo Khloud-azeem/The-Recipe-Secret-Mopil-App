@@ -22,7 +22,7 @@ class MealItem extends StatelessWidget {
   });
 
   void selectMeal(BuildContext context) {
-    Navigator.of(context).pushNamed(MealRecipe.routeName, arguments: {
+    Navigator.of(context).pushNamed(MealRecipeScreen.routeName, arguments: {
       'id': id,
       'title': title,
     });

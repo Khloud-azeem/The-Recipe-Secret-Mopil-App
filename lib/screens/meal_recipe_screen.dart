@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import '../widgets/meal_item.dart';
 import '../data.dart';
+// import '../models/meal.dart';
+// import '../screens/favourites_screen.dart';
 
-class MealRecipe extends StatefulWidget {
+class MealRecipeScreen extends StatefulWidget {
   static const routeName = '/meal-recipe';
 
+  Function isFavourite;
+  Function toggleFavourites;
+  MealRecipeScreen(this.isFavourite, this.toggleFavourites);
+
   @override
-  State<MealRecipe> createState() => _MealRecipeState();
+  State<MealRecipeScreen> createState() => _MealRecipeState();
 }
 
-class _MealRecipeState extends State<MealRecipe> {
+class _MealRecipeState extends State<MealRecipeScreen> {
   Widget buildSectionTitle(BuildContext context, String title) {
     //builder
     return Container(
@@ -36,7 +42,7 @@ class _MealRecipeState extends State<MealRecipe> {
     );
   }
 
-  void removeItem(String mealId) {}
+  // void removeItem(String mealId) {}
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +56,16 @@ class _MealRecipeState extends State<MealRecipe> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('The Recipe Secert'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              widget.toggleFavourites(mealId);
+            },
+            icon: Icon(
+              widget.isFavourite(mealId) ? Icons.star : Icons.star_border,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
